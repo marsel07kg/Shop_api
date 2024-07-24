@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
 
+
+
 from .models import UserConfirm
 from .serializers import UserSerializer, UserAuthSerializer, UserConfirmSerializer
 from django.contrib.auth import authenticate
@@ -27,11 +29,13 @@ def register_api_view(request):
         code=code,
         user=user
     )
+
     send_mail(
         'Your confirmation email',
         message=code,
-        from_email='<EMAIL>',
-        recipient_list=[user.email],
+        from_email='mbekbolotov945@gmail.com',
+        recipient_list=['mbekbolotov945@gmail.com'],
+        fail_silently=False
     )
 
     return Response(status=status.HTTP_201_CREATED)
@@ -41,13 +45,13 @@ def register_api_view(request):
 def authorization_api_view(request):
     serializer = UserAuthSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-
     user = authenticate(**serializer.validated_data)
     if user:
-
-        token, created = Token.objects.get_or_create(user=user)
-
-        return Response({'token': token.key})
+        try:
+            token = Token.objects.get(user=user)
+        except:
+            token = Token.objects.create(user=user)
+        return Response(data={'token': token.key})
     return Response(status=status.HTTP_401_UNAUTHORIZED,
                     data={'User credentials are wrong'})
 

@@ -15,14 +15,14 @@ class UserSerializer(serializers.Serializer):
         return username
 
     def validate(self, data):
-        if data['password'] != data['password']:
+        if data['password'] != data['confirm_password']:
             raise ValidationError('Passwords do not match')
         return data
 
 
 class UserAuthSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
+    username = serializers.CharField(min_length=1, max_length=20)
+    password = serializers.CharField(min_length=1, max_length=20)
 
 
 class UserConfirmSerializer(serializers.Serializer):
