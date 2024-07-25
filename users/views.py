@@ -33,8 +33,8 @@ def register_api_view(request):
     send_mail(
         'Your confirmation email',
         message=code,
-        from_email='mbekbolotov945@gmail.com',
-        recipient_list=['mbekbolotov945@gmail.com'],
+        from_email='<EMAIL>',
+        recipient_list=[user.email],
         fail_silently=False
     )
 
