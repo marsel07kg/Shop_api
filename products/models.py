@@ -23,11 +23,11 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     title = models.CharField(max_length=50, null=True)
     id = models.IntegerField(primary_key=True)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     price = models.IntegerField(default=100)
 
     def __str__(self):
-        return f"{self.description}: {self.price}"
+        return self.description
 
 
 class Review(models.Model):
